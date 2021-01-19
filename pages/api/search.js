@@ -1,7 +1,10 @@
 import search from './../../services/search-videos'
 
 export default async (req, resp) => {
-  const { q } = req.query
+    const { q } = req.query
+
+    resp.setHeader('Cache-Control', 's-maxage=10, stale-while-revalidate')
+
     try{
         const videos = await search(q)
         return resp.status(200)
@@ -11,10 +14,10 @@ export default async (req, resp) => {
             status: 200  
         })
     }catch(error){
-        console.log(error)
-        return resp.status(400).json({
+        return resp.status(400)
+        .json({
             query: q, 
-            message: error, 
+            message: error.message, 
             status: 400
         })
     }

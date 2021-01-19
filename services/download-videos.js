@@ -1,37 +1,39 @@
 import puppeteer from 'puppeteer'
+import { click, type, wait } from './search-elements'
 
-async function downloadMusic(page){
-    const selector = '.modal-content a.btn-file'
+async function getUrlDownloadMusic(page){
     const url = await page.evaluate(()=>{
         const selector = '.modal-content a.btn-file'
         return document.querySelector(selector).href
     })
-    console.log("Link: ",url)
-    if(url) {
-        console.log(url)
-        await page.goto(downloadUrl)
-        await page.waitForTimeout(time / 2)
-        return
-    }
-    await page.waitForTimeout(2000)
-    downloadMusic(page)
+    if(url) return url
+    await wait(page, 2000)
+    return getUrlDownloadMusic(page)
 }
 
 export default async function download(url, time = 0){
-    const browser = await puppeteer.launch({ headless: false });
+    const browser = await puppeteer.launch();
     const page = await browser.newPage();
-    await page.goto(`https://www.y2mate.com/youtube-mp3/`)
-        .catch(error => {
-            throw new Error('Sem acesso ao site de download da música')
-            return
-        })
-    await page.waitForTimeout(4000)
-    await page.type('input', url)
-    await page.click('#btn-submit')
-    await page.waitForTimeout(3000)
-    await page.click('#process_mp3')
+
+    try{
+        await page.goto(`https://www.y2mate.com/youtube-mp3/`)
+    }catch(error){
+        throw new Error('Sem conexão ou site de download de músicas está indisponível no momento')
+    }
+
+    await type(page,'input', url)
+    await click(page, '#btn-submit')
+    await click(page,'#process_mp3')
     await page.bringToFront()
-    await page.waitForTimeout(3000)
-    await downloadMusic(page)
+    await wait(page, 3000)
+
+    let downloadUrl
+
+    try{
+        downloadUrl = await getUrlDownloadMusic(page)
+    }catch(error){
+        throw new Error('Link de download não encontrado!')
+    }
     await browser.close()
+    return downloadUrl
 }

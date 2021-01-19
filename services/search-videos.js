@@ -1,11 +1,18 @@
 import puppeteer from 'puppeteer'
-import toMiliseconds from '../utils/miliseconds'
+import { wait } from './search-elements'
+import { toMiliseconds } from '../utils/miliseconds'
 
 export default async function search(term){
     const browser = await puppeteer.launch();
     const page = await browser.newPage();
-    await page.goto(`https://www.youtube.com/results?search_query=${term}`)
-    await page.waitForTimeout(5000)
+    
+    try{
+        await page.goto(`https://www.youtube.com/results?search_query=${term}`)
+    }catch(error){
+        throw new Error('Sem conexão ou site de busca por músicas está indisponível no momento')
+    }
+
+    await wait(page, 5000)
     const videos = await page.evaluate(() => {
         let videos = []
         const nodeVideos = document.querySelectorAll('ytd-video-renderer')

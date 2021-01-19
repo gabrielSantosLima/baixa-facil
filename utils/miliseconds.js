@@ -1,4 +1,4 @@
-export default function toMiliseconds(timeString = '00:00:00'){
+export function toMiliseconds(timeString = '00:00:00'){
     const splitedTimeString = timeString.trim().split(':')
     const timeNumbers = splitedTimeString.map(time => Number(time))
     const sortedTimeNumbers = timeNumbers.reverse()
