@@ -1,5 +1,5 @@
 import puppeteer from 'puppeteer'
-import { wait } from './search-elements'
+import { wait } from './pageManager'
 import { toMiliseconds } from '../utils/miliseconds'
 
 export default async function search(term){
