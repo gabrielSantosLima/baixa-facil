@@ -1,5 +1,4 @@
-import puppeteer from 'puppeteer'
-import { click, type, wait } from './pageManager'
+import { click, type, wait, getBrowser } from './pageManager'
 
 async function getUrlDownloadMusic(page, selector){
     const url = await page.$eval(selector, elm => elm.href)
@@ -9,7 +8,7 @@ async function getUrlDownloadMusic(page, selector){
 } 
 
 export default async function download(url){
-    const browser = await puppeteer.launch();
+    const browser = await getBrowser();
     const page = await browser.newPage();
     try{
         await page.goto(`https://www.y2mate.com/youtube-mp3/`)

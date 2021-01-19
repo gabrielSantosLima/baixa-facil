@@ -1,9 +1,8 @@
-import puppeteer from 'puppeteer'
-import { wait } from './pageManager'
+import { wait, getBrowser } from './pageManager'
 import { toMiliseconds } from '../utils/miliseconds'
 
 export default async function search(term){
-    const browser = await puppeteer.launch();
+    const browser = await getBrowser();
     const page = await browser.newPage();
     
     try{

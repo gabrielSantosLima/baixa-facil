@@ -1,3 +1,24 @@
+let chrome = {}
+let puppeteer
+const isProduction = process.env.AWS_LAMBDA_FUNCTION_VERSION || false
+
+if(isProduction){
+    chrome = require('chrome-aws-lambda')
+    puppeteer = require('puppeteer-core')
+}else{
+    puppeteer = require('puppeteer')
+}
+
+export async function getBrowser(){
+    const browser = await puppeteer.launch({
+        args: chrome.args,
+        executablePath: await chrome.executablePath,
+        headless: true,
+        defaultViewport: chrome.defaultViewport
+    });
+    return browser
+}
+
 export async function findElementBySelector(page, selector){
     const element = await page.$(selector)
     return element
