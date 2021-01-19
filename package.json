@@ -1,5 +1,5 @@
 {
-  "name": "baixa-facil-api",
+  "name": "baixa-facil",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "next": "10.0.5",
+    "puppeteer": "^5.5.0",
     "react": "17.0.1",
     "react-dom": "17.0.1"
   }
