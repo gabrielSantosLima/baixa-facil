@@ -1,15 +1,15 @@
-import download from './../../services/download-videos'
+import download from '../../services/downloadMusic'
 
 export default async (req, resp) => {
-    const video = req.body 
+    const { url } = req.query 
   
     resp.setHeader('Cache-Control', 's-maxage=60, stale-while-revalidate')
 
     try{
-        const downloadUrl = await download(video.url, video.time)
+        const downloadUrl = await download(url)
         return resp.status(200)
         .json({
-            url: video.url,
+            url,
             download_url: downloadUrl,
             message: 'Download realizado com sucesso!',
             status: 200
@@ -17,7 +17,7 @@ export default async (req, resp) => {
     }catch(error){
         return resp.status(400)
         .json({
-            url: video.url, 
+            url, 
             message: error.message, 
             status: 400
         })

@@ -1,4 +1,4 @@
-import search from './../../services/search-videos'
+import search from '../../services/searchMusic'
 
 export default async (req, resp) => {
     const { q } = req.query
